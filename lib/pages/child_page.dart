@@ -30,7 +30,7 @@ class _ChildState extends State<Child> {
   int completedAssignments = 0;
   int totalPoints = 0;
   int progress = 0;
-  String prize = ''; // سيتم تخزين الجائزة هنا
+  String prize = '';
   String week = '';
   bool isDialogShown = false;
 
@@ -42,28 +42,24 @@ class _ChildState extends State<Child> {
 
   Future<void> fetchChildName(String name) async {
     try {
-      // البحث عن الطفل باستخدام الاسم
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('children')
-          .where('name', isEqualTo: name) // البحث بناءً على الاسم
+          .where('name', isEqualTo: name)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // إذا تم العثور على الطفل
         Map<String, dynamic> childData =
             querySnapshot.docs.first.data() as Map<String, dynamic>;
 
-        // طباعة البيانات للتأكد
         print("Child Data: $childData");
 
-        // قم باستخدام البيانات كما تريد (مثل التنقل إلى صفحة أخرى)
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Addchild(
               isEditing: true,
               childData: childData,
-              childId: querySnapshot.docs.first.id, // يمكنك تمرير المعرف أيضًا
+              childId: querySnapshot.docs.first.id,
             ),
           ),
         );
@@ -84,7 +80,7 @@ class _ChildState extends State<Child> {
       // 🔹 1️⃣ جلب بيانات الطفل من Firestore
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('children')
-          .where('name', isEqualTo: widget.name) // ✅ البحث باستخدام الاسم
+          .where('name', isEqualTo: widget.name)
           .get();
 
       if (querySnapshot.docs.isEmpty) {
@@ -111,13 +107,13 @@ class _ChildState extends State<Child> {
   Future<String?> fetchRewardImage(int week) async {
     try {
       final response = await Supabase.instance.client
-          .from('rewards') // ✅ تأكد أن الجدول اسمه `rewards`
-          .select('imageUrl') // 🔹 جلب رابط الصورة فقط
+          .from('rewards')
+          .select('imageUrl')
           .eq('week', 1) // 🔹 جلب الجائزة بناءً على الأسبوع المحدد
           .maybeSingle();
 
       if (response != null) {
-        return response['imageUrl']; // ✅ إرجاع رابط الصورة
+        return response['imageUrl'];
       } else {
         print("❌ لم يتم العثور على جائزة للأسبوع $week!");
         return null;
@@ -129,8 +125,7 @@ class _ChildState extends State<Child> {
   }
 
   void checkAndShowRewardNotification(int totalPoints) async {
-    if (isDialogShown)
-      return; 
+    if (isDialogShown) return;
 
     final prefs = await SharedPreferences.getInstance();
     bool hasShownReward = prefs.getBool('hasShownReward') ?? false;
@@ -141,7 +136,7 @@ class _ChildState extends State<Child> {
           totalPoints == 80 ||
           totalPoints >= 100) {
         isDialogShown = true;
-        prefs.setBool('hasShownReward', true); 
+        prefs.setBool('hasShownReward', true);
         showPointsDialog();
       }
     }
@@ -292,7 +287,7 @@ class _ChildState extends State<Child> {
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return Image.asset(
-                                  'assets/images/icon.png', // 🔹 صورة افتراضية عند فشل التحميل
+                                  'images/icon.png', // 🔹 صورة افتراضية عند فشل التحميل
                                   width: 100,
                                   height: 100,
                                   fit: BoxFit.cover,
@@ -300,7 +295,7 @@ class _ChildState extends State<Child> {
                               },
                             )
                           : Image.asset(
-                              'assets/images/Medal.png', // 🔹 صورة افتراضية
+                              'assets/images/Medal.png',
                               width: 100,
                               height: 100,
                               fit: BoxFit.cover,
@@ -370,7 +365,7 @@ class _ChildState extends State<Child> {
                 color: Color(0xFFB9CBD9),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(top: 0.0), // رفع المحتوى لأعلى
+                padding: const EdgeInsets.only(top: 0.0),
                 child: SizedBox(
                   width: double.infinity,
                   child: Stack(
@@ -483,7 +478,7 @@ class _ChildState extends State<Child> {
                         left: 300,
                         top: 20,
                         child: CircleAvatar(
-                          radius: 36, // تقليل حجم الصورة
+                          radius: 36,
                           backgroundImage: AssetImage(widget.avatar),
                         ),
                       ),
@@ -559,7 +554,7 @@ class _ChildState extends State<Child> {
                       ////////////////////////////// الواجبات المكتملة /////////////////////////////
                       const Positioned(
                         left: 115,
-                        top: 120, // تعديل الموضع الأعلى للنص
+                        top: 120,
                         child: Text(
                           'الواجبات المكتملة',
                           textAlign: TextAlign.center,
@@ -572,13 +567,13 @@ class _ChildState extends State<Child> {
                       ),
                       Positioned(
                         left: 150,
-                        top: 140, // تعديل الموضع للأسفل لعدد الواجبات
+                        top: 140,
                         child: Text(
                           '$completedAssignments', // عرض الواجبات المكتملة
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Color(0xFF333333),
-                            fontSize: 14, // يمكن تعديل حجم الخط حسب الرغبة
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -586,7 +581,7 @@ class _ChildState extends State<Child> {
                       ////////////////////////////// النقاط المستحقة /////////////////////////////
                       const Positioned(
                         left: 270,
-                        top: 120, // تعديل الموضع الأعلى للنص
+                        top: 120, //
                         child: Text(
                           'النقاط المستحقة',
                           textAlign: TextAlign.center,
@@ -599,13 +594,13 @@ class _ChildState extends State<Child> {
                       ),
                       Positioned(
                         left: 300,
-                        top: 140, // تعديل الموضع للأسفل لعدد النقاط
+                        top: 140,
                         child: Text(
                           '$totalPoints', // عرض النقاط المستحقة
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Color(0xFF333333),
-                            fontSize: 14, // يمكن تعديل حجم الخط حسب الرغبة
+                            fontSize: 14,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -622,7 +617,7 @@ class _ChildState extends State<Child> {
                                   builder: (context) => Addrewards(
                                         name: widget.name,
                                         avatar: widget.avatar,
-                                      )), // استبدل NextPage بالصفحة المستهدفة
+                                      )),
                             );
                           },
                           child: Container(
@@ -668,8 +663,7 @@ class _ChildState extends State<Child> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          transform: Matrix4.identity()
-                            ..scale(-1.0, 1.0), // Horizontal flip
+                          transform: Matrix4.identity()..scale(-1.0, 1.0),
                         ),
                       ),
                       ////////////////////////////// مربع إضافة واجب  /////////////////////////////
@@ -685,7 +679,7 @@ class _ChildState extends State<Child> {
                                         name: widget.name,
                                         avatar: widget.avatar,
                                         isEditing: false,
-                                      )), // استبدل NextPage بالصفحة المستهدفة
+                                      )),
                             );
                           },
                           child: Container(
@@ -731,8 +725,7 @@ class _ChildState extends State<Child> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          transform: Matrix4.identity()
-                            ..scale(-1.0, 1.0), // Horizontal flip
+                          transform: Matrix4.identity()..scale(-1.0, 1.0),
                         ),
                       ),
                       Positioned(
@@ -746,7 +739,7 @@ class _ChildState extends State<Child> {
                                   builder: (context) => Rewards(
                                         name: widget.name,
                                         avatar: widget.avatar,
-                                      )), // استبدل NextPage بالصفحة المستهدفة
+                                      )),
                             );
                           },
                           child: Container(
@@ -775,8 +768,7 @@ class _ChildState extends State<Child> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          transform: Matrix4.identity()
-                            ..scale(-1.0, 1.0), // Horizontal flip
+                          transform: Matrix4.identity()..scale(-1.0, 1.0),
                         ),
                       ),
                       const Positioned(
@@ -830,7 +822,7 @@ class _ChildState extends State<Child> {
                           child: LinearProgressIndicator(
                             value: totalPoints /
                                 100, // تحديث النسبة بناءً على النقاط
-                            backgroundColor: Colors.grey, // لون الخلفية
+                            backgroundColor: Colors.grey,
                             valueColor: AlwaysStoppedAnimation<Color>(
                               totalPoints >= 80
                                   ? Colors.green[
@@ -900,7 +892,7 @@ class _ChildState extends State<Child> {
                         child: Image.asset(
                           totalPoints >= 100
                               ? 'assets/images/prize.png' // ✅ تغيير الصورة عند الوصول إلى 100 نقطة
-                              : 'assets/images/WhitePrize.png', // 🔹 الصورة الافتراضية
+                              : 'assets/images/WhitePrize.png',
                           width: 70,
                           height: 70,
                           fit: BoxFit.contain,
@@ -921,7 +913,7 @@ class _ChildState extends State<Child> {
                                         name: widget.name,
                                         avatar: widget.avatar,
                                         isEditing: false,
-                                      )), // استبدل NextPage بالصفحة المستهدفة
+                                      )),
                             );
                           },
                           child: Container(
@@ -965,8 +957,7 @@ class _ChildState extends State<Child> {
                               fit: BoxFit.cover,
                             ),
                           ),
-                          transform: Matrix4.identity()
-                            ..scale(1.0, 1.0), // Horizontal flip
+                          transform: Matrix4.identity()..scale(1.0, 1.0),
                         ),
                       ),
                       const Positioned(

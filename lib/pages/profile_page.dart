@@ -110,7 +110,6 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       body: Stack(
         children: [
-          // الخلفية
           SizedBox(
             width: double.infinity,
             height: double.infinity,
@@ -119,7 +118,6 @@ class _ProfileState extends State<Profile> {
               fit: BoxFit.cover,
             ),
           ),
-          // العنوان
           Positioned(
             top: 50,
             left: 130,
@@ -131,7 +129,6 @@ class _ProfileState extends State<Profile> {
               ),
             ),
           ),
-          // الحقول
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -271,7 +268,6 @@ class _ProfileState extends State<Profile> {
               ),
             ),
           ),
-          // مستطيل التنقل
           Positioned(
             bottom: 20,
             left: 110,
@@ -306,7 +302,6 @@ class _ProfileState extends State<Profile> {
                             size: 40,
                             color: Color.fromARGB(255, 183, 224, 255)),
                         onPressed: () {
-                          // الصفحة الحالية
                         },
                       ),
                     ],

@@ -39,14 +39,13 @@ class Task {
   }
 }
 
-/// 🔹 هذه الدالة تسترجع الواجبات السابقة بناءً على `childID`، `weeknum` و `monthnum`
 Future<List<Task>> fetchTasksByChild(String childID, int weeknum, int monthnum) async {
   try {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('tasks')
-        .where('childID', isEqualTo: childID)  // 🔹 تصفية بناءً على الطفل
-        .where('week', isEqualTo: weeknum)    // 🔹 تصفية بناءً على الأسبوع
-        .where('month', isEqualTo: monthnum)  // 🔹 تصفية بناءً على الشهر
+        .where('childID', isEqualTo: childID)
+        .where('week', isEqualTo: weeknum)
+        .where('month', isEqualTo: monthnum)
         .get();
 
     return querySnapshot.docs.map((doc) => Task.fromFirestore(doc)).toList();

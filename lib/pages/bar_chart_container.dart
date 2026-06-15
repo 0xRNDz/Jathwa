@@ -22,9 +22,9 @@ class BarChartContainer extends StatelessWidget {
     return StreamBuilder(
       stream: FirebaseFirestore.instance
           .collection('tasks')
-          .where('childID', isEqualTo: childID) // 🔹 تصفية بناءً على الطفل
-          .where('week', isEqualTo: weeknum) // 🔹 تصفية بناءً على الأسبوع
-          .where('month', isEqualTo: monthnum) // 🔹 تصفية بناءً على الشهر
+          .where('childID', isEqualTo: childID)
+          .where('week', isEqualTo: weeknum)
+          .where('month', isEqualTo: monthnum)
           .snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {

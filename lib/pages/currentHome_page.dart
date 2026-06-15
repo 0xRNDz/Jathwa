@@ -85,7 +85,6 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
       await challenges.add({
         'message': message,
         'points': points,
-        // 'completedAt': FieldValue.serverTimestamp(), // إضافة توقيت الحفظ
       });
 
       print('تم حفظ الرسالة والنقاط بنجاح في Firestore');
@@ -151,9 +150,9 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
                       // تخزين الرسالة والنقاط
                       await saveChallengeToFirebase(
                         '!!لقد أكملت الواجبات اليومية لمدة 3 أيام متتالية',
-                        10, // النقاط
+                        10,
                       );
-                      Navigator.of(context).pop(); // إغلاق الإشعار
+                      Navigator.of(context).pop();
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.lightGreen,
@@ -184,25 +183,22 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
       // البحث عن الطفل باستخدام الاسم
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('children')
-          .where('name', isEqualTo: name) // البحث بناءً على الاسم
+          .where('name', isEqualTo: name) 
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // إذا تم العثور على الطفل
         Map<String, dynamic> childData =
             querySnapshot.docs.first.data() as Map<String, dynamic>;
 
-        // طباعة البيانات للتأكد
         print("Child Data: $childData");
 
-        // قم باستخدام البيانات كما تريد (مثل التنقل إلى صفحة أخرى)
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Addchild(
               isEditing: true,
               childData: childData,
-              childId: querySnapshot.docs.first.id, // يمكنك تمرير المعرف أيضًا
+              childId: querySnapshot.docs.first.id, 
             ),
           ),
         );
@@ -302,10 +298,9 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
     return days[date.weekday - 1];
   }
 
-// **🎨 تحديث `getDayColor` لاستدعاء `markHomeworkCompleted()`**
   Color getDayColor(String day, Map<String, dynamic> homework) {
     if (homework.containsKey('completed') && homework['completed'] == true) {
-      return Colors.green; // ✅ يتحول للأخضر بعد الضغط
+      return Colors.green; 
     }
 
     switch (day) {
@@ -349,7 +344,7 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
                     fetchChildData(context, widget.name);
                   },
                   child: CircleAvatar(
-                    radius: 30, // تقليل حجم الصورة
+                    radius: 30, 
                     backgroundImage: AssetImage(widget.avatar),
                   ),
                 ),
@@ -375,18 +370,17 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
               left: 30,
               top: 100,
               child: Container(
-                padding: const EdgeInsets.all(8), // مسافة صغيرة داخل الحاوية
+                padding: const EdgeInsets.all(8), 
                 height: 45,
                 width: MediaQuery.of(context).size.width -
-                    45, // العرض مع مراعاة الهوامش
+                    45, 
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200, // اللون الخلفي العام
-                  borderRadius: BorderRadius.circular(24), // الزوايا الدائرية
+                  color: Colors.grey.shade200, 
+                  borderRadius: BorderRadius.circular(24),
                 ),
                 child: Row(
                   children: [
                     Expanded(
-                      // الزر الثاني (السابقه)
                       child: SwitchContainer(
                         text: 'السابقه',
                         ontap: () {
@@ -405,11 +399,10 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
                         },
                         color: !selected
                             ? Colors.white
-                            : Colors.transparent, // لون الزر
+                            : Colors.transparent,
                       ),
                     ),
                     Expanded(
-                      // الزر الأول (الحالية)
                       child: SwitchContainer(
                         text: 'الحالية',
                         ontap: () {
@@ -429,7 +422,7 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
                         },
                         color: selected
                             ? Colors.white
-                            : Colors.transparent, // لون الزر
+                            : Colors.transparent,
                       ),
                     ),
                   ],
@@ -499,7 +492,6 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
                                     } else {
                                       return;
                                     }
-                                    // ✅ تسجيل اليوم عند الضغط على المستطيل + تحديث اللون
                                     markHomeworkCompleted(
                                         homeworkDate, homework);
                                   },
@@ -509,7 +501,7 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
                                     padding: const EdgeInsets.all(16),
                                     decoration: BoxDecoration(
                                       color: getDayColor(day,
-                                          homework), // ✅ تحديث اللون عند الضغط
+                                          homework), 
                                       borderRadius: BorderRadius.circular(40),
                                       boxShadow: [
                                         BoxShadow(
@@ -581,7 +573,6 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
                                               const SizedBox(width: 53),
 
                                               // ✅ الانتقال إلى صفحة حل الواجب
-                                              // صورة القسم
                                               Image.asset(
                                                 subjectImages[
                                                         homework['subject']] ??
@@ -590,7 +581,6 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
                                                 height: 30,
                                               ),
                                               const SizedBox(width: 8),
-                                              // اسم المادة
                                               Text(
                                                 homework['subjectName'] ??
                                                     'غير محدد',
@@ -612,7 +602,7 @@ class _WeeklyHomeworkState extends State<WeeklyHomework> {
                                               ),
                                               Row(
                                                 mainAxisAlignment: MainAxisAlignment
-                                                    .start, // لضمان المحاذاة الصحيحة
+                                                    .start,
                                                 children: [
                                                   if (isEnglish(
                                                       homework['activity']))

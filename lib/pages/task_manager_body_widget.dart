@@ -96,7 +96,7 @@ class _TaskManagerBodyWidgetState extends State<TaskManagerBodyWidget> {
                                   builder: (context) => WeeklyHomework(
                                     name: widget.name,
                                     avatar: widget.avatar, isEditing: false,
-                                  ), // استبدل بـ الصفحة المرادة
+                                  ),
                                 ),
                               );
                             },
@@ -115,7 +115,7 @@ class _TaskManagerBodyWidgetState extends State<TaskManagerBodyWidget> {
                                   builder: (context) => PrevioushomePage(
                                     name: widget.name,
                                     avatar: widget.avatar,
-                                  ), // استبدل بـ الصفحة المرادة
+                                  ),
                                 ),
                               );
                             },
@@ -124,7 +124,6 @@ class _TaskManagerBodyWidgetState extends State<TaskManagerBodyWidget> {
                       ),
                     ),
                     PreviousHomework(childID:widget.name,)
-                    // !selected ? const PreviousHomework() : const AddHomework(),
                   ],
                 ),
               )

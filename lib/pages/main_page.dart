@@ -14,7 +14,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: FirebaseAuth.instance.currentUser == null ? LoginPage() : homeTwo(),
-      // دعم اتجاه اللغة
     );
   }
 }
@@ -35,7 +34,7 @@ class _MainPageState extends State<MainPage> {
           decoration: const BoxDecoration(
             image: DecorationImage(
               image:
-                  AssetImage('images/Background.jpg'), // استبدل بالمسار الصحيح
+                  AssetImage('images/Background.jpg'),
               fit: BoxFit.cover,
             ),
           ),
@@ -46,13 +45,13 @@ class _MainPageState extends State<MainPage> {
               children: [
                 // الشعار
                 Image.asset(
-                  'images/Logo.png', // استبدل بالمسار الصحيح
+                  'images/Logo.png',
                   height: 300,
                 ),
                 const SizedBox(height: 20),
                 // اسم الشعار
                 Image.asset(
-                  'images/Name.png', // استبدل بالمسار الصحيح
+                  'images/Name.png',
                   height: 130,
                 ),
                 const SizedBox(height: 90),
@@ -86,7 +85,6 @@ class _MainPageState extends State<MainPage> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                // توسيط النص "هل لديك حساب؟ سجل الدخول"
                 Center(
                   child: RichText(
                     text: TextSpan(

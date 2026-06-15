@@ -36,7 +36,6 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // الخلفية
           Container(
             width: double.infinity,
             height: double.infinity,

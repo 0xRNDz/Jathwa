@@ -18,7 +18,6 @@ class _homeTwoState extends State<homeTwo> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background Image
           SizedBox(
             width: double.infinity,
             height: double.infinity,
@@ -42,7 +41,6 @@ class _homeTwoState extends State<homeTwo> {
                   ),
                 ),
                 const SizedBox(width: 20),
-                // Child Profile Button
                 GestureDetector(
                   onTap: () {
                     Navigator.push(
@@ -50,7 +48,7 @@ class _homeTwoState extends State<homeTwo> {
                       MaterialPageRoute(
                           builder: (context) => Addchild(
                                 isEditing: false,
-                              )), // استبدل NextPage بالصفحة المستهدفة
+                              )),
                     );
                   },
                   child: Container(
@@ -79,7 +77,6 @@ class _homeTwoState extends State<homeTwo> {
             ),
           ),
 
-          // White Background Section
           Align(
             alignment: Alignment.bottomCenter,
             child: Container(
@@ -141,7 +138,7 @@ class _homeTwoState extends State<homeTwo> {
                                       name: name,
                                       avatar: avatar,
                                       isEditing: false,
-                                    )), // استبدل NextPage بالصفحة المستهدفة
+                                    )),
                           );
                         },
                         child: Container(
@@ -163,7 +160,7 @@ class _homeTwoState extends State<homeTwo> {
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
                                     CircleAvatar(
-                                      radius: 36, // تقليل حجم الصورة
+                                      radius: 36, 
                                       backgroundImage: AssetImage(avatar),
                                       backgroundColor: Colors.white,
                                     ),
@@ -172,7 +169,7 @@ class _homeTwoState extends State<homeTwo> {
                                       name,
                                       textAlign: TextAlign.center,
                                       style: const TextStyle(
-                                        fontSize: 18, // حجم النص أصغر
+                                        fontSize: 18,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.white,
                                       ),
@@ -215,7 +212,6 @@ class _homeTwoState extends State<homeTwo> {
           Positioned(
             bottom: 7,
             left: 110,
-            // Bottom Navigation
             child: Align(
               alignment: Alignment.bottomCenter,
               child: Container(

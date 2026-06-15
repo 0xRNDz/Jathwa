@@ -34,7 +34,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     return Scaffold(
       body: Stack(
         children: [
-          // الخلفية
           Container(
             width: double.infinity,
             height: double.infinity,

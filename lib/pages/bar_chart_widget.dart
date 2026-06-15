@@ -45,9 +45,9 @@ Future<Map<String, int>> fetchActivityCounts(String childID, int weeknum, int mo
   try {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('tasks')
-        .where('childID', isEqualTo: childID) // 🔹 تصفية حسب الطفل
-        .where('week', isEqualTo: weeknum) // 🔹 تصفية حسب الأسبوع
-        .where('month', isEqualTo: monthnum) // 🔹 تصفية حسب الشهر
+        .where('childID', isEqualTo: childID) 
+        .where('week', isEqualTo: weeknum) 
+        .where('month', isEqualTo: monthnum) 
         .get();
 
     final counts = <String, int>{};

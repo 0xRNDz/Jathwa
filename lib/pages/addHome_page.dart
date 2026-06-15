@@ -38,7 +38,7 @@ class _AddhomeworkState extends State<addHomework> {
     "أدب 📜",
     "دين 🕌",
     "فنون 🎨"
-  ]; // قائمة الخيارات
+  ];
   static const List<String> activities = [
     "نط الحبل",
     "رقص",
@@ -65,9 +65,9 @@ class _AddhomeworkState extends State<addHomework> {
       // التأكد من تحويل التاريخ بشكل صحيح
       var date = widget.homeworkData!['date'];
       if (date is Timestamp) {
-        selectedDate = date.toDate(); 
+        selectedDate = date.toDate();
       } else if (date is String) {
-        selectedDate = DateTime.parse(date); 
+        selectedDate = DateTime.parse(date);
       }
     }
   }
@@ -98,7 +98,7 @@ class _AddhomeworkState extends State<addHomework> {
       'minutes': _selectedMinutes,
       'name': widget.name,
       'addedAt': FieldValue.serverTimestamp(),
-      'date': Timestamp.fromDate(selectedDate), 
+      'date': Timestamp.fromDate(selectedDate),
     };
 
     try {
@@ -120,7 +120,12 @@ class _AddhomeworkState extends State<addHomework> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) =>  Child(name:widget.name , avatar: widget.avatar, isEditing: false,)),
+        MaterialPageRoute(
+            builder: (context) => Child(
+                  name: widget.name,
+                  avatar: widget.avatar,
+                  isEditing: false,
+                )),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -145,8 +150,8 @@ class _AddhomeworkState extends State<addHomework> {
     );
   }
 
+  // دالة لحذف الواجب
   void _deleteHomework(String homeworkId) async {
-    // دالة لحذف الواجب
     try {
       await FirebaseFirestore.instance
           .collection('homeworks')
@@ -175,7 +180,7 @@ class _AddhomeworkState extends State<addHomework> {
             ),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
                 _deleteHomework("homeworkId"); // Call the delete function
               },
               child: const Text('نعم'),
@@ -186,30 +191,27 @@ class _AddhomeworkState extends State<addHomework> {
     );
   }
 
+  // البحث عن الطفل باستخدام الاسم
   Future<void> fetchChildData(String name) async {
     try {
-      // البحث عن الطفل باستخدام الاسم
       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
           .collection('children')
-          .where('name', isEqualTo: name) // البحث بناءً على الاسم
+          .where('name', isEqualTo: name)
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // إذا تم العثور على الطفل
         Map<String, dynamic> childData =
             querySnapshot.docs.first.data() as Map<String, dynamic>;
 
-        // طباعة البيانات للتأكد
         print("Child Data: $childData");
 
-        // قم باستخدام البيانات كما تريد (مثل التنقل إلى صفحة أخرى)
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Addchild(
               isEditing: true,
               childData: childData,
-              childId: querySnapshot.docs.first.id, // يمكنك تمرير المعرف أيضًا
+              childId: querySnapshot.docs.first.id,
             ),
           ),
         );
@@ -227,15 +229,14 @@ class _AddhomeworkState extends State<addHomework> {
 
   @override
   Widget build(BuildContext context) {
-    String formattedDate = DateFormat('yyyy/MM/dd')
-        .format(selectedDate); // استخدام selectedDate هنا
+    String formattedDate = DateFormat('yyyy/MM/dd').format(selectedDate);
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 185, 203, 217),
       body: Stack(
         children: [
           Positioned(
-            top: 40, // المسافة من الأعلى
-            left: 210, // المسافة من اليمين
+            top: 40,
+            left: 210,
             child: Container(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -254,27 +255,24 @@ class _AddhomeworkState extends State<addHomework> {
                     ),
                   ),
                   const SizedBox(width: 20),
-                  //avatar
                   Stack(
                     alignment: AlignmentDirectional.bottomEnd,
                     children: [
                       Container(
-                        width: 80, // عرض الصورة مع الإطار
-                        height: 80, // ارتفاع الصورة مع الإطار
-
+                        width: 80,
+                        height: 80,
                         child: CircleAvatar(
-                          radius: 22, // تقليل حجم الصورة
+                          radius: 22,
                           backgroundImage: AssetImage(widget.avatar),
                         ),
                       ),
-                      // زر تعديل المعلومات
                       Positioned(
                         child: Container(
                           width: 25,
                           height: 25,
                           decoration: const BoxDecoration(
-                            shape: BoxShape.circle, // جعل الزر دائريًا
-                            color: Colors.white, // لون الخلفية
+                            shape: BoxShape.circle,
+                            color: Colors.white,
                           ),
                           child: IconButton(
                             icon: const Icon(
@@ -283,8 +281,7 @@ class _AddhomeworkState extends State<addHomework> {
                               color: Colors.black,
                             ),
                             onPressed: () {
-                              fetchChildData(widget
-                                  .name); // استدعاء الدالة وتمرير اسم الطفل
+                              fetchChildData(widget.name);
                             },
                           ),
                         ),
@@ -303,11 +300,11 @@ class _AddhomeworkState extends State<addHomework> {
               padding: const EdgeInsets.only(top: 120),
               child: Container(
                 width: 430,
-                height: 620, // عرض المستطيل
-                padding: const EdgeInsets.all(20), // حشو العناصر
+                height: 620,
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white, // لون الخلفية
-                  borderRadius: BorderRadius.circular(32), // استدارة الحواف
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(32),
                 ),
                 child: ListView(
                   children: [
@@ -330,8 +327,8 @@ class _AddhomeworkState extends State<addHomework> {
                                     builder: (context) => Child(
                                       name: widget.name,
                                       avatar: widget.avatar,
-                                       isEditing: false,
-                                    ), // الصفحة التي تريد الانتقال إليها
+                                      isEditing: false,
+                                    ),
                                   ),
                                 );
                               },
@@ -386,7 +383,6 @@ class _AddhomeworkState extends State<addHomework> {
                                 ),
                               ),
                               const SizedBox(height: 18),
-                              // قسم المادة
                               const Text(
                                 ":قسم المادة",
                                 style: TextStyle(
@@ -395,13 +391,12 @@ class _AddhomeworkState extends State<addHomework> {
                                 ),
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween, // مسافة بين الخيارات
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: subjects.map((choice) {
                                   return ChoiceChip(
                                     label: Text(choice),
-                                    selected: _selectedSubject ==
-                                        choice, // اختيار الخيار الحالي
+                                    selected: _selectedSubject == choice,
                                     selectedColor: const Color.fromARGB(
                                         255, 207, 227, 226),
                                     backgroundColor: Colors.white,
@@ -419,7 +414,6 @@ class _AddhomeworkState extends State<addHomework> {
                                 height: 18,
                               ),
 
-                              //المدة
                               const Text(
                                 ":(بالدقائق)المدة",
                                 style: TextStyle(
@@ -429,13 +423,12 @@ class _AddhomeworkState extends State<addHomework> {
                               ),
                               //المؤقت
                               Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween, // مسافة بين الخيارات
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: minutes.map((choice) {
                                   return ChoiceChip(
                                     label: Text(choice),
-                                    selected: _selectedMinutes ==
-                                        choice, // اختيار الخيار الحالي
+                                    selected: _selectedMinutes == choice,
                                     selectedColor: const Color.fromARGB(
                                         255, 207, 227, 226),
                                     backgroundColor: Colors.white,
@@ -454,7 +447,7 @@ class _AddhomeworkState extends State<addHomework> {
 
                               //التاريخ
                               Text(
-                                formattedDate, // عرض التاريخ المنسق
+                                formattedDate,
                                 style: const TextStyle(
                                     fontSize: 17, fontWeight: FontWeight.w300),
                               ),
@@ -495,24 +488,22 @@ class _AddhomeworkState extends State<addHomework> {
                                 },
                                 style: ElevatedButton.styleFrom(
                                   foregroundColor: Colors.black,
-                                  backgroundColor: Colors.white, // لون الخلفية
+                                  backgroundColor: Colors.white,
                                 ),
                                 child: Row(
-                                  mainAxisSize: MainAxisSize
-                                      .min, // تصغير الحجم ليتناسب مع المحتوى
+                                  mainAxisSize: MainAxisSize.min,
                                   children: [
                                     Text(
-                                      formattedDate, // عرض التاريخ المنسق
+                                      formattedDate,
                                       style: const TextStyle(
                                           fontSize: 17,
                                           fontWeight: FontWeight.w300),
                                     ),
-                                    const SizedBox(
-                                        width: 10), // مسافة بين النص والأيقونة
+                                    const SizedBox(width: 10),
                                     const Icon(
-                                      Icons.edit, // الأيقونة بجانب التاريخ
+                                      Icons.edit,
                                       size: 20,
-                                      color: Colors.black, // لون الأيقونة
+                                      color: Colors.black,
                                     ),
                                   ],
                                 ),
@@ -532,9 +523,8 @@ class _AddhomeworkState extends State<addHomework> {
                               ),
                               Center(
                                 child: Wrap(
-                                  // استخدام Wrap لتجنب تجاوز العناصر
-                                  spacing: 30.0, // مسافة أفقية بين العناصر
-                                  runSpacing: 4.0, // مسافة رأسية بين الصفوف
+                                  spacing: 30.0,
+                                  runSpacing: 4.0,
                                   children: activities.map((choice) {
                                     return ChoiceChip(
                                       label: Text(choice),
@@ -568,9 +558,9 @@ class _AddhomeworkState extends State<addHomework> {
                             _showDeletConfirmationDialog(context);
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(
-                                255, 255, 137, 119), // لون الزر
-                            foregroundColor: Colors.black, // لون النص
+                            backgroundColor:
+                                const Color.fromARGB(255, 255, 137, 119),
+                            foregroundColor: Colors.black,
                           ),
                           child: const Text(
                             "حذف",
@@ -586,9 +576,9 @@ class _AddhomeworkState extends State<addHomework> {
                             _saveHomework();
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color.fromARGB(
-                                255, 187, 221, 108), // لون الزر
-                            foregroundColor: Colors.black, // لون النص
+                            backgroundColor:
+                                const Color.fromARGB(255, 187, 221, 108),
+                            foregroundColor: Colors.black,
                           ),
                           child: const Text(
                             "حفظ",
@@ -605,34 +595,29 @@ class _AddhomeworkState extends State<addHomework> {
             ),
           ),
 
-          // مستطيل التنقل
           Positioned(
             bottom: 20,
             left: 110,
             child: Align(
               alignment: AlignmentDirectional.bottomCenter,
               child: Container(
-                width: 172, // عرض المستطيل
-                height: 58, // ارتفاع المستطيل
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10), // حشو داخلي
+                width: 172,
+                height: 58,
+                padding: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 34, 166, 215), // لون الخلفية
-                  borderRadius: BorderRadius.circular(18), // استدارة الحواف
+                  color: const Color.fromARGB(255, 34, 166, 215),
+                  borderRadius: BorderRadius.circular(18),
                 ),
                 child: Center(
                   child: Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.center, // توسيط الأيقونات أفقيًا
-                    crossAxisAlignment:
-                        CrossAxisAlignment.center, // توسيط الأيقونات عموديًا
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       IconButton(
                         icon: const Icon(
-                          Icons.grid_view_rounded, // الأيقونة الأولى
+                          Icons.grid_view_rounded,
                           size: 40,
-                          color: Color.fromARGB(
-                              255, 183, 224, 255), // لون الأيقونة
+                          color: Color.fromARGB(255, 183, 224, 255),
                         ),
                         onPressed: () {
                           Navigator.push(

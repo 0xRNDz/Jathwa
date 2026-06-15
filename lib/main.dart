@@ -29,9 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: FirebaseAuth.instance.currentUser == null ? const MainPage() : const homeTwo(),
       home: MainPage(),
-      // دعم اتجاه اللغة
     );
   }
 }

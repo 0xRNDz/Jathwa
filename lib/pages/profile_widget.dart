@@ -34,14 +34,14 @@ class _ProfileWidgetState extends State<ProfileWidget> {
           querySnapshot.docs.first.data() as Map<String, dynamic>;
       print("Child Data: $childData");
 
-      // قم باستخدام البيانات كما تريد (مثل التنقل إلى صفحة أخرى)
+
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => Addchild(
             isEditing: true,
             childData: childData,
-            childId: querySnapshot.docs.first.id, // يمكنك تمرير المعرف أيضًا
+            childId: querySnapshot.docs.first.id,
           ),
         ),
       );

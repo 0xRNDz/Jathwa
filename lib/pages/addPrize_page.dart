@@ -13,7 +13,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: Addrewards(),
     );
   }
 }
@@ -34,89 +33,88 @@ class Addrewards extends StatefulWidget {
 
 class _AddrewardsState extends State<Addrewards> {
   final List<TextEditingController> nameControllers = [];
-  final List<File?> imageFiles =
-      List.generate(3, (index) => null); // تخزين الصور
+  final List<File?> imageFiles = List.generate(3, (index) => null);
 
   Future<void> pickImage(int index) async {
     final ImagePicker picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
-        imageFiles[index] = File(pickedFile.path); // تمرير المسار الصحيح
+        imageFiles[index] = File(pickedFile.path);
       });
     }
   }
 
- void saveRewards() async {
-  try {
-    // تخزين الجوائز في قائمة
-    final List<Map<String, dynamic>> rewards = [];
-    for (int i = 0; i < 3; i++) {
-      if (nameControllers[i].text.isNotEmpty && imageFiles[i] != null) {
-        final fileName =
-            'reward_image_${i}_${DateTime.now().millisecondsSinceEpoch}.jpg';
-        print('Attempting to upload image with filename: $fileName');
+  // تخزين الجوائز في قائمة
+  void saveRewards() async {
+    try {
+      final List<Map<String, dynamic>> rewards = [];
+      for (int i = 0; i < 3; i++) {
+        if (nameControllers[i].text.isNotEmpty && imageFiles[i] != null) {
+          final fileName =
+              'reward_image_${i}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+          print('Attempting to upload image with filename: $fileName');
 
-        final imageUrl = await uploadImageToSupabase(imageFiles[i]!, fileName);
-        print('Received imageUrl: $imageUrl');
+          final imageUrl =
+              await uploadImageToSupabase(imageFiles[i]!, fileName);
+          print('Received imageUrl: $imageUrl');
 
-        if (imageUrl != null) {
           // إضافة الجائزة للقائمة
-          rewards.add({
-            'name': nameControllers[i].text,
-            'imageUrl': imageUrl,
-            'week': i + 1, // الأسبوع
-            'month': DateTime.now().month, // الشهر
-          });
-          print('Added to rewards array: ${rewards.last}');
-        } else {
-          print('Failed to get imageUrl for reward $i');
+          if (imageUrl != null) {
+            rewards.add({
+              'name': nameControllers[i].text,
+              'imageUrl': imageUrl,
+              'week': i + 1,
+              'month': DateTime.now().month,
+            });
+            print('Added to rewards array: ${rewards.last}');
+          } else {
+            print('Failed to get imageUrl for reward $i');
+          }
         }
       }
-    }
 
-    // التحقق من أن هناك جوائز لحفظها
-    if (rewards.isNotEmpty) {
-      for (var reward in rewards) {
-        // إدخال كل جائزة على حدة
-        final response = await Supabase.instance.client
-    .from('rewards') // اسم الجدول
-    .insert(reward)
-    .select(); // لجلب النتيجة بعد الإدخال
+      // التحقق من أن هناك جوائز لحفظها
+      if (rewards.isNotEmpty) {
+        for (var reward in rewards) {
+          // إدخال كل جائزة على حدة
+          final response = await Supabase.instance.client
+              .from('rewards')
+              .insert(reward)
+              .select(); 
 
-if (response != null) {
-  // إدخال ناجح
-  print('تم إدخال الجائزة بنجاح: $response');
-} else {
-  // إذا حدث خطأ مع الإدخال
-  print('خطأ أثناء إدخال الجائزة');
-}
+          if (response != null) {
+            print('تم إدخال الجائزة بنجاح: $response');
+          } else {
+            print('خطأ أثناء إدخال الجائزة');
+          }
+        }
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('تم حفظ جميع الجوائز بنجاح!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('لم يتم العثور على جوائز صالحة للحفظ!'),
+            duration: Duration(seconds: 2),
+          ),
+        );
       }
-
+    } catch (e) {
+      print('Error saving rewards: $e');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('تم حفظ جميع الجوائز بنجاح!'),
-          duration: Duration(seconds: 2),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('لم يتم العثور على جوائز صالحة للحفظ!'),
+          content: Text('حدث خطأ أثناء حفظ الجوائز!'),
           duration: Duration(seconds: 2),
         ),
       );
     }
-  } catch (e) {
-    print('Error saving rewards: $e');
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('حدث خطأ أثناء حفظ الجوائز!'),
-        duration: Duration(seconds: 2),
-      ),
-    );
   }
-}
+
   Future<String?> uploadImageToSupabase(File image, String fileName) async {
     try {
       // Debug print before upload
@@ -126,8 +124,8 @@ if (response != null) {
       // Upload file to Supabase storage
       final response =
           await Supabase.instance.client.storage.from('images').upload(
-                fileName, // Just use fileName instead of path/fileName
-                image, // Pass the File directly
+                fileName,
+                image,
                 fileOptions: FileOptions(cacheControl: '3600', upsert: true),
               );
 
@@ -171,21 +169,18 @@ if (response != null) {
           .get();
 
       if (querySnapshot.docs.isNotEmpty) {
-        // إذا تم العثور على الطفل
         Map<String, dynamic> childData =
             querySnapshot.docs.first.data() as Map<String, dynamic>;
 
-        // طباعة البيانات للتأكد
         print("Child Data: $childData");
 
-        // قم باستخدام البيانات كما تريد (مثل التنقل إلى صفحة أخرى)
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) => Addchild(
               isEditing: true,
               childData: childData,
-              childId: querySnapshot.docs.first.id, // يمكنك تمرير المعرف أيضًا
+              childId: querySnapshot.docs.first.id, 
             ),
           ),
         );
@@ -207,15 +202,13 @@ if (response != null) {
       backgroundColor: const Color.fromARGB(255, 185, 207, 217),
       body: Column(
         children: [
-          // الجزء العلوي الذي يحتوي على الاسم والصورة الشخصية
           Padding(
             padding: const EdgeInsets.only(
-                left: 20, right: 20, top: 65), // إضافة مسافة من الأعلى
+                left: 20, right: 20, top: 65),
             child: Row(
               mainAxisAlignment:
-                  MainAxisAlignment.end, // جعل المحتوى بالكامل في الجهة اليمنى
+                  MainAxisAlignment.end,
               children: [
-                // الاسم بجانب الصورة
                 Row(
                   children: [
                     Text(
@@ -227,22 +220,22 @@ if (response != null) {
                       ),
                     ),
                     const SizedBox(
-                        width: 10), // مسافة بين الاسم والصورة الرمزية
+                        width: 10),
                     Stack(
                       clipBehavior: Clip
-                          .none, // لضمان ظهور القلم خارج حدود الصورة الرمزية
+                          .none,
                       children: [
                         CircleAvatar(
                           radius: 31,
                           backgroundImage: AssetImage(widget.avatar),
                         ),
                         Positioned(
-                          bottom: -2, // وضع القلم أسفل قليلاً
-                          right: -5, // وضع القلم بجانب الصورة
+                          bottom: -2, 
+                          right: -5,
                           child: GestureDetector(
                             onTap: () {
                               fetchChildData(widget
-                                  .name); // استدعاء الدالة وتمرير اسم الطفل
+                                  .name);
                             },
                             child: Container(
                               width: 25,
@@ -274,11 +267,9 @@ if (response != null) {
             ),
           ),
 
-          // الحاوية البيضاء خلف الجوائز
           Expanded(
             child: SingleChildScrollView(
               child: Stack(children: [
-                // الحاوية البيضاء
                 Positioned.fill(
                   child: Container(
                     margin: const EdgeInsets.only(top: 20),
@@ -307,7 +298,8 @@ if (response != null) {
                                 MaterialPageRoute(
                                   builder: (context) => Child(
                                     name: widget.name,
-                                    avatar: widget.avatar, isEditing: false,
+                                    avatar: widget.avatar,
+                                    isEditing: false,
                                   ),
                                 ),
                               );
@@ -324,7 +316,7 @@ if (response != null) {
                           const Spacer(),
                           const Padding(
                             padding: EdgeInsets.only(
-                                top: 13), // تقليل المسافة العلوية
+                                top: 13),
                             child: Text(
                               'إضافة جوائز',
                               style: TextStyle(
@@ -337,7 +329,6 @@ if (response != null) {
                         ],
                       ),
 
-                      // محتوى الجوائز
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: Column(
@@ -362,7 +353,6 @@ if (response != null) {
                             ),
                             const SizedBox(height: 20),
 
-                            // زر الحفظ
                             Center(
                               child: ElevatedButton(
                                 onPressed: saveRewards,

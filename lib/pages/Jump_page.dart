@@ -12,9 +12,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:process_run/shell.dart';
 
-
-
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -25,11 +22,11 @@ void main() async {
 }
 
 class JumpPage extends StatefulWidget {
- final String subjectName; // اسم المادة
-  final String name; // اسم المستخدم
-  final String avatar; // صورة المستخدم
-  final String activity; // نوع النشاط
-    final int remainingTimeFromHomework; // الوقت المتبقي للعودة إلى الواجب
+  final String subjectName;
+  final String name;
+  final String avatar;
+  final String activity;
+  final int remainingTimeFromHomework;
   final String minutes;
 
   JumpPage({
@@ -37,8 +34,8 @@ class JumpPage extends StatefulWidget {
     required this.name,
     required this.avatar,
     required this.activity,
-    required this.minutes, required this.remainingTimeFromHomework,
-  
+    required this.minutes,
+    required this.remainingTimeFromHomework,
   });
 
   @override
@@ -46,13 +43,13 @@ class JumpPage extends StatefulWidget {
 }
 
 class _TimerPageState extends State<JumpPage> {
-  late int totalTimeInSeconds ; // Total timer duration (3 minutes)
-  late int remainingTime ; // Remaining time
+  late int totalTimeInSeconds;
+  late int remainingTime; 
   Timer? _timer;
   bool isRunning = false; // Check if the timer is running or paused
-  String selectedExercise = 'subjectName'; // سيتم تحديثه من subjectName
- bool hasStarted = false; // متغير للتحقق من إذا بدأ المؤقت مسبقًا أم لا
-final AudioPlayer _audioPlayer = AudioPlayer(); // مشغل الصوت
+  String selectedExercise = 'subjectName';
+  bool hasStarted = false; // متغير للتحقق من إذا بدأ المؤقت مسبقًا أم لا
+  final AudioPlayer _audioPlayer = AudioPlayer(); 
 
   double get progress => remainingTime / totalTimeInSeconds;
 
@@ -66,51 +63,51 @@ final AudioPlayer _audioPlayer = AudioPlayer(); // مشغل الصوت
     "Game by VR": 'assets/images/vr.png'
   };
 
-  
-
   // Toggle timer (Start/Pause)
-void toggleTimer() {
-  if (isRunning) {
-    pauseTimer(); // إيقاف المؤقت عند الضغط
-  } else {
-    startTimer(); // استئناف المؤقت من النقطة الحالية
-  }
-}
-  // Start timer
-Future<void> startTimer() async {
-  if (!hasStarted) {
-    hasStarted = true;
-    for (int i = 4; i > 0; i--) {
-      await playStartSound(i); 
-      await Future.delayed(Duration(seconds: 1)); 
+  void toggleTimer() {
+    if (isRunning) {
+      pauseTimer();
+    } else {
+      startTimer();
     }
   }
-  if (!isRunning) {
-    setState(() {
-      isRunning = true;
-    });
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+
+  // Start timer
+  Future<void> startTimer() async {
+    if (!hasStarted) {
+      hasStarted = true;
+      for (int i = 4; i > 0; i--) {
+        await playStartSound(i);
+        await Future.delayed(Duration(seconds: 1));
+      }
+    }
+    if (!isRunning) {
       setState(() {
-        if (remainingTime > 0) {
-          remainingTime--;
-           if (remainingTime == 0) {
+        isRunning = true;
+      });
+      _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+        setState(() {
+          if (remainingTime > 0) {
+            remainingTime--;
+            if (remainingTime == 0) {
               _timer!.cancel();
               isRunning = false;
-              navigateBackToHomework(); 
+              navigateBackToHomework();
             }
-          if (remainingTime <= 10 && remainingTime > 0) {
-            playNumberSound(remainingTime);
+            if (remainingTime <= 10 && remainingTime > 0) {
+              playNumberSound(remainingTime);
+            }
+          } else {
+            _timer!.cancel();
+            isRunning = false;
+            showEndOfTimeNotification(context);
           }
-        } else {
-          _timer!.cancel();
-          isRunning = false;
-          showEndOfTimeNotification(context); 
-        }
+        });
       });
-    });
+    }
   }
-}
- void navigateBackToHomework() {
+
+  void navigateBackToHomework() {
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
@@ -125,36 +122,34 @@ Future<void> startTimer() async {
     );
   }
 
- 
 // Pause timer
-void pauseTimer() {
-  // إيقاف المؤقت الحالي
-  if (_timer != null && isRunning) {
-    _timer?.cancel();
-    setState(() {
-      isRunning = false;
-    });
+  void pauseTimer() {
+    if (_timer != null && isRunning) {
+      _timer?.cancel();
+      setState(() {
+        isRunning = false;
+      });
+    }
   }
-}
+
 // Play start sound for countdown
- 
-Future<void> playStartSound(int number) async {
-  try {
-    await _audioPlayer.play(AssetSource('sound/start.mp3')); 
-  } catch (e) {
-    print("Error playing start sound: $e");
+  Future<void> playStartSound(int number) async {
+    try {
+      await _audioPlayer.play(AssetSource('sound/start.mp3'));
+    } catch (e) {
+      print("Error playing start sound: $e");
+    }
   }
-}
 
   Future<void> playNumberSound(int number) async {
     try {
-await _audioPlayer.play(AssetSource('sound/alarm.mp3'));
+      await _audioPlayer.play(AssetSource('sound/alarm.mp3'));
     } catch (e) {
       print("Error playing sound: $e");
     }
   }
 
- // إشعار بانتهاء الوقت
+  // إشعار بانتهاء الوقت
   void showEndOfTimeNotification(BuildContext context) {
     showDialog(
       context: context,
@@ -194,7 +189,7 @@ await _audioPlayer.play(AssetSource('sound/alarm.mp3'));
                 SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pop(); // إغلاق الإشعار
+                    Navigator.of(context).pop();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.lightGreen,
@@ -219,35 +214,33 @@ await _audioPlayer.play(AssetSource('sound/alarm.mp3'));
     );
   }
 
-
   @override
   void dispose() {
     _timer?.cancel(); // Clean up timer when exiting
     super.dispose();
   }
 
-@override
-void initState() {
-  super.initState();
+  @override
+  void initState() {
+    super.initState();
 
-  // تحويل الوقت الإجمالي (minutes) إلى ثواني
-  totalTimeInSeconds = int.parse(widget.minutes) * 60;
+    // تحويل الوقت الإجمالي (minutes) إلى ثواني
+    totalTimeInSeconds = int.parse(widget.minutes) * 60;
 
-  // إذا كان هناك وقت متبقٍ وارد من صفحة الواجب، استخدمه، وإلا استخدم الوقت الكامل
-  remainingTime = widget.remainingTimeFromHomework != null 
-      ? widget.remainingTimeFromHomework 
-      : totalTimeInSeconds;
+    // إذا كان هناك وقت متبقٍ وارد من صفحة الواجب، استخدمه، وإلا استخدم الوقت الكامل
+    remainingTime = widget.remainingTimeFromHomework != null
+        ? widget.remainingTimeFromHomework
+        : totalTimeInSeconds;
 
-  // إعداد اسم التمرين
-  selectedExercise = widget.subjectName;
+    // إعداد اسم التمرين
+    selectedExercise = widget.subjectName;
 
-  // التأكد من إعداد صورة التمرين المناسبة
-  if (!exercises.containsKey(widget.activity)) {
-    exercises[widget.activity] = 'assets/images/vr.png'; // تعيين صورة افتراضية إذا لم تكن موجودة
+    // التأكد من إعداد صورة التمرين المناسبة
+    if (!exercises.containsKey(widget.activity)) {
+      exercises[widget.activity] =
+          'images/vr.png'; // تعيين صورة افتراضية إذا لم تكن موجودة
+    }
   }
-}
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -266,9 +259,9 @@ void initState() {
                     builder: (context) => DoHomework(
                           name: widget.name,
                           avatar: widget.avatar,
-                           subject: widget.subjectName,
-                           activity: widget.activity,
-                            minutes: widget.minutes,
+                          subject: widget.subjectName,
+                          activity: widget.activity,
+                          minutes: widget.minutes,
                         )),
               );
             },
@@ -278,7 +271,6 @@ void initState() {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Title text above the timer
               const Text(
                 "تمارين رياضية",
                 style: TextStyle(
@@ -304,16 +296,15 @@ void initState() {
 
               // Dropdown menu to select exercise
               Text(
-              widget.activity, // نوع النشاط
-              style: const TextStyle(
-                fontSize: 18,
-                color: Colors.grey,
+                widget.activity,
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey,
+                ),
               ),
-            ),
 
               const SizedBox(height: 20),
 
-              // Circular progress and GIF
               Stack(
                 alignment: Alignment.center,
                 children: [
@@ -330,22 +321,21 @@ void initState() {
                   ),
                   // Display selected exercise GIF
                   ClipOval(
-              child: Image.asset(
-                  exercises[widget.activity] ?? 'assets/images/vr.png',
-
-                width: 150,
-                height: 150,
-                fit: BoxFit.cover,
-              ),
-            ),
+                    child: Image.asset(
+                      exercises[widget.activity] ?? 'assets/images/vr.png',
+                      width: 150,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ],
               ),
 
               const SizedBox(height: 20),
 
               // Task description
-               Text(
-                 " واجب الـ${widget.subjectName}", // النص مع اسم المادة
+              Text(
+                " واجب الـ${widget.subjectName}",
 
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
@@ -392,5 +382,3 @@ void initState() {
     );
   }
 }
-
-

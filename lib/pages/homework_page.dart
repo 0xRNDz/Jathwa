@@ -157,12 +157,12 @@ class _DoHomeworkState extends State<DoHomework> {
       isRunning = false;
     });
   }
-// Play start sound for countdown
 
+// Play start sound for countdown
   Future<void> playStartSound(int number) async {
     try {
       await _audioPlayer.play(AssetSource(
-          'sound/start.mp3')); // تأكد من وضع الملف الصوتي في المجلد الصحيح
+          'sound/start.mp3'));
     } catch (e) {
       print("Error playing start sound: $e");
     }
@@ -450,7 +450,6 @@ class _DoHomeworkState extends State<DoHomework> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const SizedBox(height: 20),
-              // عرض اسم المادة أو التمرين فوق المؤقت الدائري
               Text(
                 sections[currentSectionIndex]['task'] == widget.subject
                     ? "📚  واجب  ${widget.subject}" // 🔹 إذا كان واجبًا، أضف كلمة "واجب"
@@ -488,8 +487,8 @@ class _DoHomeworkState extends State<DoHomework> {
                 ],
               ),
               const SizedBox(height: 20),
-              // عرض الوقت الإجمالي للمهمة الحالية
 
+              // عرض الوقت الإجمالي للمهمة الحالية
               Text(
                 "${(durationInSeconds ~/ 60)}:00",
                 textDirection: TextDirection.ltr,
@@ -517,7 +516,7 @@ class _DoHomeworkState extends State<DoHomework> {
                     onPressed: isRunning ? null : startTimer,
                     child: const Text('البدء'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green, // زر البدء أحمر
+                      backgroundColor: Colors.green, 
                       foregroundColor: Colors.white,
                     ),
                   ),
@@ -530,7 +529,7 @@ class _DoHomeworkState extends State<DoHomework> {
                         : null,
                     child: const Text('التوقف'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red, // زر التخطي أحمر
+                      backgroundColor: Colors.red, 
                       foregroundColor: Colors.white,
                     ),
                   ),
@@ -539,7 +538,7 @@ class _DoHomeworkState extends State<DoHomework> {
                     onPressed: moveToNextSection,
                     child: const Text('تخطي'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blue, // زر التخطي أحمر
+                      backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
                     ),
                   ),

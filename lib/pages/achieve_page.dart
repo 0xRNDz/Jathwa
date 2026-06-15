@@ -6,8 +6,6 @@ import 'package:jathwa1/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-
-
 Future<Map<String, List<Map<String, dynamic>>>>
     fetchChallengesAndRewards() async {
   try {
@@ -47,21 +45,16 @@ Future<Map<String, List<Map<String, dynamic>>>>
   }
 }
 
-
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-    
     );
   }
 }
 
-
 class Rewards extends StatelessWidget {
-
   final String name;
   final String avatar;
 
@@ -71,48 +64,44 @@ class Rewards extends StatelessWidget {
     required this.avatar,
   }) : super(key: key);
 
-
   Future<void> fetchChildData(BuildContext context, String name) async {
-  try {
-    // البحث عن الطفل باستخدام الاسم
-    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-        .collection('children')
-        .where('name', isEqualTo: name) // البحث بناءً على الاسم
-        .get();
+    try {
+      // البحث عن الطفل باستخدام الاسم
+      QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+          .collection('children')
+          .where('name', isEqualTo: name) // البحث بناءً على الاسم
+          .get();
 
-    if (querySnapshot.docs.isNotEmpty) {
-      // إذا تم العثور على الطفل
-      Map<String, dynamic> childData =
-          querySnapshot.docs.first.data() as Map<String, dynamic>;
+      if (querySnapshot.docs.isNotEmpty) {
+        // إذا تم العثور على الطفل
+        Map<String, dynamic> childData =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
 
-      // طباعة البيانات للتأكد
-      print("Child Data: $childData");
+        // طباعة البيانات للتأكد
+        print("Child Data: $childData");
 
-      // قم باستخدام البيانات كما تريد (مثل التنقل إلى صفحة أخرى)
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => Addchild(
-            isEditing: true,
-            childData: childData,
-            childId: querySnapshot.docs.first.id, // يمكنك تمرير المعرف أيضًا
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => Addchild(
+              isEditing: true,
+              childData: childData,
+              childId: querySnapshot.docs.first.id,
+            ),
           ),
-        ),
-      );
-    } else {
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('لم يتم العثور على بيانات لهذا الطفل')),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('لم يتم العثور على بيانات لهذا الطفل')),
+        SnackBar(content: Text('حدث خطأ أثناء جلب البيانات: $e')),
       );
     }
-  } catch (e) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('حدث خطأ أثناء جلب البيانات: $e')),
-    );
   }
-}
 
-
-  
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 185, 207, 217),
@@ -139,8 +128,7 @@ class Rewards extends StatelessWidget {
                 top: 110,
                 left: 0,
                 right: 0,
-                bottom: 0, // اجعل الحاوية تمتد إلى الأسفل
-
+                bottom: 0,
                 child: Container(
                   height: 700,
                   decoration: BoxDecoration(
@@ -158,16 +146,17 @@ class Rewards extends StatelessWidget {
                 child: Stack(
                   clipBehavior: Clip.none,
                   children: [
-                     CircleAvatar(
-                          radius: 31, // تقليل حجم الصورة
-                          backgroundImage: AssetImage(avatar),
-                        ),
+                    CircleAvatar(
+                      radius: 31,
+                      backgroundImage: AssetImage(avatar),
+                    ),
                     Positioned(
                       bottom: 0,
                       right: -5,
                       child: GestureDetector(
                         onTap: () {
-                          fetchChildData(context,name); // استدعاء الدالة وتمرير اسم الطفل
+                          fetchChildData(
+                              context, name); // استدعاء الدالة وتمرير اسم الطفل
                         },
                         child: Container(
                           width: 25,
@@ -217,15 +206,18 @@ class Rewards extends StatelessWidget {
                   children: [
                     IconButton(
                       icon: Icon(Icons.arrow_back, color: Colors.black),
-                       onPressed: () {
-                            Navigator.push(
-                            context,
-                           MaterialPageRoute(
-                            builder: (context) =>
-                              Child(name: name, avatar: avatar, isEditing: false,), // الصفحة التي تريد الانتقال إليها
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Child(
+                              name: name,
+                              avatar: avatar,
+                              isEditing: false,
                             ),
-                          );
-                        },
+                          ),
+                        );
+                      },
                     ),
                     Spacer(),
                     Text(
@@ -394,7 +386,7 @@ class Rewards extends StatelessWidget {
                 left: 76,
                 top: 278,
                 child: Image.asset(
-                  'assets/images/WhiteFire.png', // Path to the image in your assets
+                  'assets/images/WhiteFire.png',
                   width: 28,
                   height: 40,
                   fit: BoxFit.cover,
@@ -438,28 +430,25 @@ class Rewards extends StatelessWidget {
                   'assets/images/Empty.jpg',
                   width: 80,
                   height: 80,
-                  //fit: BoxFit.cover,
                 ),
               ),
 
               // Method call for challenges and rewards below the fire line
 
               Positioned(
-                top: 360, // ارتفاع بداية الحاوية
+                top: 360,
                 left: 16,
                 right: 16,
-                bottom: 0, // امتداد الحاوية حتى النهاية
+                bottom: 0,
                 child: SizedBox(
-                  height: MediaQuery.of(context).size.height -
-                      360, // احسب الارتفاع المتبقي
+                  height: MediaQuery.of(context).size.height - 360,
                   child: ListView(
                     padding: const EdgeInsets.all(16),
                     children: [
                       buildChallengesAndRewards(challenges, rewards),
                       Positioned(
                         left: 115,
-                        top: MediaQuery.of(context).size.height -
-                            70, // زر التنقل في الأسفل
+                        top: MediaQuery.of(context).size.height - 70,
                         child: Align(
                           alignment: Alignment.bottomCenter,
                           child: Container(
@@ -507,7 +496,7 @@ class Rewards extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ), // استدعاء الدالة مباشرة
+                      ),
                     ],
                   ),
                 ),
@@ -522,11 +511,10 @@ class Rewards extends StatelessWidget {
   Widget buildChallengesAndRewards(List<Map<String, dynamic>> challenges,
       List<Map<String, dynamic>> rewards) {
     return Padding(
-      padding: const EdgeInsets.all(16), // هوامش خارجية
+      padding: const EdgeInsets.all(16),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // عمود التحديات المكتملة
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -536,7 +524,7 @@ class Rewards extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.right,
                 ),
-                SizedBox(height: 16), // مسافة بين العنوان والمحتوى
+                SizedBox(height: 16),
                 ...challenges.asMap().entries.map((entry) {
                   final index = entry.key;
                   final challenge = entry.value;
@@ -548,7 +536,7 @@ class Rewards extends StatelessWidget {
                         challenge['points'],
                         challenge['completedAt'],
                       ),
-                      if (index != challenges.length - 1) // منع الخط الأخير
+                      if (index != challenges.length - 1)
                         Divider(thickness: 1, color: Colors.grey.shade300),
                     ],
                   );
@@ -556,15 +544,11 @@ class Rewards extends StatelessWidget {
               ],
             ),
           ),
-
-          // فاصل بين العمودين
           Container(
             width: 1,
-            color: Colors.grey.shade300, // لون الخط الفاصل
-            margin: EdgeInsets.symmetric(horizontal: 16), // هوامش الخط
+            color: Colors.grey.shade300,
+            margin: EdgeInsets.symmetric(horizontal: 16),
           ),
-
-          // عمود الجوائز السابقة
           Flexible(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
@@ -574,7 +558,7 @@ class Rewards extends StatelessWidget {
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   textAlign: TextAlign.right,
                 ),
-                SizedBox(height: 16), // مسافة بين العنوان والمحتوى
+                SizedBox(height: 16),
                 ...rewards.asMap().entries.map((entry) {
                   final index = entry.key;
                   final reward = entry.value;
@@ -587,7 +571,7 @@ class Rewards extends StatelessWidget {
                         reward['week'],
                         reward['month'],
                       ),
-                      if (index != rewards.length - 1) // منع الخط الأخير
+                      if (index != rewards.length - 1)
                         Divider(thickness: 1, color: Colors.grey.shade300),
                     ],
                   );
@@ -650,10 +634,9 @@ class Rewards extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // النص على اليمين
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end, // محاذاة النصوص لليمين
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 name,
@@ -661,7 +644,7 @@ class Rewards extends StatelessWidget {
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                 ),
-                textAlign: TextAlign.right, // محاذاة النص لليمين
+                textAlign: TextAlign.right,
               ),
               SizedBox(height: 4),
               Text(
@@ -676,7 +659,6 @@ class Rewards extends StatelessWidget {
           ),
         ),
         SizedBox(width: 16),
-        // الصورة على اليسار
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: Image.network(

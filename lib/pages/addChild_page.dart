@@ -384,8 +384,8 @@ class _AddchildState extends State<Addchild> {
                                       saveChildToDatabase, // الدالة المسؤولة عن الحفظ أو التعديل
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: const Color.fromARGB(
-                                        255, 187, 221, 108), // لون الزر
-                                    foregroundColor: Colors.black, // لون النص
+                                        255, 187, 221, 108),
+                                    foregroundColor: Colors.black,
                                   ),
                                   child: Text(
                                     widget.isEditing
@@ -409,58 +409,57 @@ class _AddchildState extends State<Addchild> {
               ),
             ),
           ),
-          //مستطيل التنقل
           Positioned(
             bottom: 20,
             left: 110,
             child: Align(
               alignment: AlignmentDirectional.bottomCenter,
               child: Container(
-                width: 172, // عرض المستطيل
-                height: 58, // ارتفاع المستطيل
+                width: 172, 
+                height: 58,
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10), // حشو داخلي
+                    const EdgeInsets.symmetric(horizontal: 10), 
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 34, 166, 215), // لون الخلفية
-                  borderRadius: BorderRadius.circular(18), // استدارة الحواف
+                  color: const Color.fromARGB(255, 34, 166, 215), 
+                  borderRadius: BorderRadius.circular(18), 
                 ),
                 child: Center(
                   child: Row(
                     mainAxisAlignment:
-                        MainAxisAlignment.center, // توسيط الأيقونات أفقيًا
+                        MainAxisAlignment.center, 
                     crossAxisAlignment:
-                        CrossAxisAlignment.center, // توسيط الأيقونات عموديًا
+                        CrossAxisAlignment.center, 
                     children: [
                       IconButton(
                         icon: const Icon(
-                          Icons.grid_view_rounded, // الأيقونة الأولى
+                          Icons.grid_view_rounded, 
                           size: 40,
                           color: Color.fromARGB(
-                              255, 183, 224, 255), // لون الأيقونة
+                              255, 183, 224, 255),
                         ),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const homeTwo()), // الانتقال إلى صفحة الأطفال
+                                    const homeTwo()),
                           );
                         },
                       ),
-                      const SizedBox(width: 20), // مسافة بين الأيقونات
+                      const SizedBox(width: 20), 
                       IconButton(
                         icon: const Icon(
-                          Icons.person, // الأيقونة الثانية
+                          Icons.person, 
                           size: 40,
                           color: Color.fromARGB(
-                              255, 183, 224, 255), // لون الأيقونة
+                              255, 183, 224, 255),
                         ),
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) =>
-                                    const Profile()), // الانتقال إلى صفحة الملف الشخصي
+                                    const Profile()),
                           );
                         },
                       ),
@@ -514,14 +513,14 @@ class _AddchildState extends State<Addchild> {
         actions: [
           TextButton(
             onPressed: () {
-              Navigator.of(context).pop(); // إغلاق نافذة التأكيد
+              Navigator.of(context).pop();
             },
             child: const Text('إلغاء'),
           ),
           TextButton(
             onPressed: () async {
               try {
-                Navigator.of(context).pop(); // إغلاق نافذة التأكيد
+                Navigator.of(context).pop();
                 
                 // التحقق إذا كان في وضع التعديل ولديه معرف الطفل
                 if (widget.isEditing && widget.childId != null) {

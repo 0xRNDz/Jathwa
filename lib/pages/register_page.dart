@@ -10,7 +10,7 @@ class RegisterForm extends StatefulWidget {
 
   @override
   State<RegisterForm> createState() => _RegisterFormState();
-} // 👈 هذا القوس كان مفقوداً عندك في السطر 13 وهو سبب المشكلة الرئيسية!
+}
 
 class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController emailController = TextEditingController();
@@ -21,9 +21,9 @@ class _RegisterFormState extends State<RegisterForm> {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
 
-  @override // 👈 يجب إضافة @override هنا
+  @override
   void initState() {
-    super.initState(); // 👈 يجب استدعاء الـ super أولاً داخل الـ initState
+    super.initState();
 
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
@@ -32,7 +32,7 @@ class _RegisterFormState extends State<RegisterForm> {
         print('User is signed in!');
       }
     });
-  } // 👈 تأكد من إغلاق دالة initState بشكل صحيح
+  }
 
   void saveUserToFirestore(String uid) async {
     try {
@@ -115,7 +115,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       label: 'الاسم الأول',
                       hint: 'إسمك الأول',
                       controller:
-                          firstNameController, // ربط بـ TextEditingController
+                          firstNameController,
                     ),
                   ),
                   Positioned(
@@ -125,7 +125,7 @@ class _RegisterFormState extends State<RegisterForm> {
                       label: 'الاسم الأخير',
                       hint: 'إسمك الأخير',
                       controller:
-                          lastNameController, // ربط بـ TextEditingController
+                          lastNameController,
                     ),
                   ),
                   Positioned(
@@ -144,7 +144,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     top: 540,
                     child: _buildPhoneNumberField(
                       controller:
-                          phoneNumberController, // ربط بـ TextEditingController
+                          phoneNumberController,
                     ),
                   ),
                   Positioned(
@@ -179,7 +179,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   ),
                   Positioned(
                     left: 50,
-                    top: 630, // تغيير الموضع لجعل الزر في الأسفل
+                    top: 630, 
                     child: GestureDetector(
                       onTap: () async {
                         try {
@@ -244,7 +244,7 @@ class _RegisterFormState extends State<RegisterForm> {
   Widget _buildTextField({
     required String label,
     required String hint,
-    required TextEditingController controller, // تمرير الـ controller
+    required TextEditingController controller, 
     bool obscureText = false,
   }) {
     return Column(
@@ -271,7 +271,7 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           padding: const EdgeInsets.symmetric(horizontal: 8),
           child: TextField(
-            controller: controller, // ربط الـ controller بالحقل
+            controller: controller,
             obscureText: obscureText,
             textAlign: TextAlign.right,
             decoration: InputDecoration(
@@ -282,7 +282,7 @@ class _RegisterFormState extends State<RegisterForm> {
               ),
               border: InputBorder.none,
               contentPadding: const EdgeInsets.only(
-                  left: 5, top: -15), // Adjust the padding here
+                  left: 5, top: -15),
             ),
           ),
         ),
@@ -291,7 +291,7 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   Widget _buildEmailField() {
-    String? emailError; // To hold the error message
+    String? emailError; 
 
     return StatefulBuilder(
       builder: (context, setState) => Column(
@@ -338,7 +338,7 @@ class _RegisterFormState extends State<RegisterForm> {
                 contentPadding: EdgeInsets.only(
                   left: 5,
                   top: -15,
-                ), // Adjust the padding here
+                ),
               ),
             ),
           ),
@@ -393,8 +393,8 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           const SizedBox(height: 5),
           Container(
-            width: 340, // عرض الحقل
-            height: 35, // ارتفاع الحقل
+            width: 340, 
+            height: 35,
             decoration: BoxDecoration(
               color: const Color(0xE5FFFFFF),
               border: Border.all(
@@ -422,7 +422,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   ),
                 ),
                 Positioned(
-                  left: 8, // أيقونة العين على اليسار
+                  left: 8,
                   child: GestureDetector(
                     onTap: onToggleVisibility,
                     child: Icon(
@@ -467,7 +467,6 @@ class _RegisterFormState extends State<RegisterForm> {
     return StatefulBuilder(
       builder: (context, setState) => Stack(
         children: [
-          // حقل كلمة السر
           _buildPasswordField(
             label: 'كلمة السر',
             top: 360,
@@ -536,7 +535,7 @@ class _RegisterFormState extends State<RegisterForm> {
 
   // حقل رقم الجوال مع التحقق من البداية بـ +966
   Widget _buildPhoneNumberField({
-    required TextEditingController controller, // إضافة الـ controller هنا
+    required TextEditingController controller, 
   }) {
     String? phoneError;
 
@@ -566,7 +565,7 @@ class _RegisterFormState extends State<RegisterForm> {
             ),
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: TextField(
-              controller: controller, // ربط الحقل بـ controller
+              controller: controller, 
               keyboardType: TextInputType.phone,
               decoration: const InputDecoration(
                 hintText: '+9665xxxxxxxx',
