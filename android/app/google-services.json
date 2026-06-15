@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "374087765532",
+    "project_id": "jathwa1-3752b",
+    "storage_bucket": "jathwa1-3752b.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374087765532:android:117242e6cf63b98599d9d9",
+        "android_client_info": {
+          "package_name": "com.example.jathwa1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDk7QGzLAV4EwhIylMJvMIiSgzBwAbdKkU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
